@@ -1,9 +1,18 @@
 import type { CustomDnsResolver, IDNSQueryResponse } from "../..";
 
 export const cloudflareDnsResolver: CustomDnsResolver = async (domain) => {
-  const res = await fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=TXT`, {
+  const url = new URL("https://cloudflare-dns.com/dns-query");
+  url.searchParams.set("name", domain);
+  url.searchParams.set("type", "TXT");
+
+  const res = await fetch(url, {
     method: "GET",
-    headers: { accept: "application/dns-json", contentType: "application/json", connection: "keep-alive" },
+    headers: { Accept: "application/dns-json" },
   });
+
+  if (!res.ok) {
+    throw new Error(`Cloudflare DNS request failed: HTTP ${res.status}`);
+  }
+
   return res.json() as Promise<IDNSQueryResponse>;
 };
