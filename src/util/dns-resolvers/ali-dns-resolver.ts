@@ -2,6 +2,11 @@ import type { CustomDnsResolver, IDNSQueryResponse } from "../..";
 
 export const aliDnsResolver: CustomDnsResolver = async (domain) => {
   const url = new URL("https://dns.alidns.com/resolve");
+
+  if (!domain) {
+    throw new Error("Domain is required");
+  }
+
   url.searchParams.set("name", domain);
   url.searchParams.set("type", "16");
 

@@ -2,6 +2,11 @@ import type { CustomDnsResolver, IDNSQueryResponse } from "../..";
 
 export const googleDnsResolver: CustomDnsResolver = async (domain) => {
   const url = new URL("https://dns.google/resolve");
+
+  if (!domain) {
+    throw new Error("Domain is required");
+  }
+
   url.searchParams.set("name", domain);
   url.searchParams.set("type", "TXT");
 

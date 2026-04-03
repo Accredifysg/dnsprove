@@ -15,10 +15,10 @@ const emptyDnsJson = {
 };
 
 describe("googleDnsResolver", () => {
-  let server: SetupServerApi;
+  let server: SetupServerApi | undefined;
 
   afterEach(() => {
-    server.close();
+    server?.close();
   });
 
   test("requests Google DNS JSON with name, TXT type, and encoded query", async () => {
@@ -44,13 +44,17 @@ describe("googleDnsResolver", () => {
 
     await expect(googleDnsResolver("my.domain.test")).rejects.toThrow(/HTTP 503/);
   });
+
+  test("throws when domain is empty", async () => {
+    await expect(googleDnsResolver("")).rejects.toThrow("Domain is required");
+  });
 });
 
 describe("cloudflareDnsResolver", () => {
-  let server: SetupServerApi;
+  let server: SetupServerApi | undefined;
 
   afterEach(() => {
-    server.close();
+    server?.close();
   });
 
   test("requests Cloudflare DNS JSON with name, TXT type, Accept header, and encoded query", async () => {
@@ -77,13 +81,17 @@ describe("cloudflareDnsResolver", () => {
 
     await expect(cloudflareDnsResolver("cf.example.test")).rejects.toThrow(/HTTP 502/);
   });
+
+  test("throws when domain is empty", async () => {
+    await expect(cloudflareDnsResolver("")).rejects.toThrow("Domain is required");
+  });
 });
 
 describe("aliDnsResolver", () => {
-  let server: SetupServerApi;
+  let server: SetupServerApi | undefined;
 
   afterEach(() => {
-    server.close();
+    server?.close();
   });
 
   test("requests Ali DNS JSON with name, type 16 (TXT), and encoded query", async () => {
@@ -108,5 +116,9 @@ describe("aliDnsResolver", () => {
     server.listen();
 
     await expect(aliDnsResolver("ali.example.test")).rejects.toThrow(/HTTP 503/);
+  });
+
+  test("throws when domain is empty", async () => {
+    await expect(aliDnsResolver("")).rejects.toThrow("Domain is required");
   });
 });
