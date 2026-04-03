@@ -11,7 +11,6 @@ export const cloudflareDnsResolver: CustomDnsResolver = async (domain) => {
   url.searchParams.set("type", "TXT");
 
   const res = await fetch(url, {
-    method: "GET",
     headers: { Accept: "application/dns-json" },
   });
 

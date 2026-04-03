@@ -12,7 +12,7 @@ export const aliDnsResolver: CustomDnsResolver = async (domain) => {
   url.searchParams.set("name", domain);
   url.searchParams.set("type", ALI_DNS_TXT_QUERY_TYPE);
 
-  const res = await fetch(url, { method: "GET" });
+  const res = await fetch(url);
 
   if (!res.ok) {
     throw new Error(`Ali DNS request failed: HTTP ${res.status}`);

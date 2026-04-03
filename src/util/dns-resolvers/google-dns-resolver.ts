@@ -10,7 +10,7 @@ export const googleDnsResolver: CustomDnsResolver = async (domain) => {
   url.searchParams.set("name", domain);
   url.searchParams.set("type", "TXT");
 
-  const res = await fetch(url, { method: "GET" });
+  const res = await fetch(url);
 
   if (!res.ok) {
     throw new Error(`Google DNS request failed: HTTP ${res.status}`);
