@@ -19,5 +19,12 @@ export const cloudflareDnsResolver: CustomDnsResolver = async (domain) => {
     throw new Error(`Cloudflare DNS request failed: HTTP ${res.status}`);
   }
 
-  return res.json() as Promise<IDNSQueryResponse>;
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error("Failed to parse DNS response JSON");
+  }
+
+  return data as IDNSQueryResponse;
 };

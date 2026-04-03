@@ -16,5 +16,12 @@ export const googleDnsResolver: CustomDnsResolver = async (domain) => {
     throw new Error(`Google DNS request failed: HTTP ${res.status}`);
   }
 
-  return res.json() as Promise<IDNSQueryResponse>;
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error("Failed to parse DNS response JSON");
+  }
+
+  return data as IDNSQueryResponse;
 };
