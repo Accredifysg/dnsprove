@@ -1,5 +1,7 @@
 import type { CustomDnsResolver, IDNSQueryResponse } from "../..";
 
+/** Ali DNS JSON API uses numeric RRTYPE; 16 = TXT */
+const ALI_DNS_TXT_QUERY_TYPE = "16";
 export const aliDnsResolver: CustomDnsResolver = async (domain) => {
   const url = new URL("https://dns.alidns.com/resolve");
 
@@ -8,7 +10,7 @@ export const aliDnsResolver: CustomDnsResolver = async (domain) => {
   }
 
   url.searchParams.set("name", domain);
-  url.searchParams.set("type", "16");
+  url.searchParams.set("type", ALI_DNS_TXT_QUERY_TYPE);
 
   const res = await fetch(url, { method: "GET" });
 
