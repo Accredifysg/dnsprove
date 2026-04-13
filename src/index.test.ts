@@ -255,6 +255,27 @@ describe("queryDns", () => {
     expect(sortedAnswer).toMatchObject(sampleResponse.Answer);
   });
 
+  test("Should fallback to third dns when first and second dns is down", async () => {
+    const handlers = [
+      http.get("https://dns.google/resolve", (_) => {
+        return new HttpResponse(null, { status: 500 });
+      }),
+      http.get("https://cloudflare-dns.com/dns-query", (_) => {
+        return new HttpResponse(null, { status: 500 });
+      }),
+      http.get("https://dns.alidns.com/resolve", (_) => {
+        return HttpResponse.json(sampleResponse);
+      }),
+    ];
+    server = setupServer(...handlers);
+    server.listen();
+
+    const records = await queryDns("https://donotuse.trustvc.io", testDnsResolvers);
+
+    const sortedAnswer = records?.Answer.sort((a, b) => a.data.localeCompare(b.data));
+    expect(sortedAnswer).toMatchObject(sampleResponse.Answer);
+  });
+
   test("Should throw error when all dns provided are down", async () => {
     const handlers = [
       http.get("https://dns.google/resolve", (_) => {
