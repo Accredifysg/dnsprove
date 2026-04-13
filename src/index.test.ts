@@ -16,11 +16,11 @@ describe("getCertStoreRecords", () => {
     type: "openatts",
     net: "ethereum",
     netId: "3",
-    dnssec: true,
+    dnssec: false,
     addr: "0x2f60375e8144e16Adf1979936301D8341D58C36C",
   };
   test("it should work", async () => {
-    const records = await getDocumentStoreRecords("donotuse.openattestation.com");
+    const records = await getDocumentStoreRecords("donotuse.trustvc.io");
     expect(records).toStrictEqual([sampleDnsTextRecordWithDnssec]);
   });
 
@@ -35,14 +35,14 @@ describe("getCertStoreRecords", () => {
 
 describe("getDnsDidRecords", () => {
   test("it should work", async () => {
-    const records = await getDnsDidRecords("donotuse.openattestation.com");
+    const records = await getDnsDidRecords("donotuse.trustvc.io");
     expect(records).toStrictEqual([
       {
         type: "openatts",
         algorithm: "dns-did",
         publicKey: "did:ethr:0xE712878f6E8d5d4F9e87E10DA604F9cB564C9a89#controller",
         version: "1.0",
-        dnssec: true,
+        dnssec: false,
       },
     ]);
   });
@@ -185,29 +185,29 @@ describe("queryDns", () => {
     RA: true,
     AD: true,
     CD: false,
-    Question: [{ name: "donotuse.openattestation.com.", type: 16 }],
+    Question: [{ name: "donotuse.trustvc.io.", type: 16 }],
     Answer: [
       {
-        name: "donotuse.openattestation.com.",
+        name: "donotuse.trustvc.io.",
         type: 16,
         TTL: 300,
         data: "openatts a=dns-did; p=did:ethr:0xE712878f6E8d5d4F9e87E10DA604F9cB564C9a89#controller; v=1.0;",
       },
       {
-        name: "donotuse.openattestation.com.",
+        name: "donotuse.trustvc.io.",
         type: 16,
         TTL: 300,
         data:
           "openatts DO NOT ADD ANY RECORDS BEYOND THIS AS THIS DOMAIN IS USED FOR DNSPROVE NPM LIBRARY INTEGRATION TESTS",
       },
       {
-        name: "donotuse.openattestation.com.",
+        name: "donotuse.trustvc.io.",
         type: 16,
         TTL: 300,
         data: "openatts fooooooobarrrrrrrrr this entry exists to ensure validation works",
       },
       {
-        name: "donotuse.openattestation.com.",
+        name: "donotuse.trustvc.io.",
         type: 16,
         TTL: 300,
         data: "openatts net=ethereum netId=3 addr=0x2f60375e8144e16Adf1979936301D8341D58C36C",
@@ -232,7 +232,7 @@ describe("queryDns", () => {
     server = setupServer(...handlers);
     server.listen();
 
-    const records = await queryDns("https://donotuse.openattestation.com", testDnsResolvers);
+    const records = await queryDns("https://donotuse.trustvc.io", testDnsResolvers);
     const sortedAnswer = records?.Answer.sort((a, b) => a.data.localeCompare(b.data));
     expect(sortedAnswer).toMatchObject(sampleResponse.Answer);
   });
@@ -249,7 +249,7 @@ describe("queryDns", () => {
     server = setupServer(...handlers);
     server.listen();
 
-    const records = await queryDns("https://donotuse.openattestation.com", testDnsResolvers);
+    const records = await queryDns("https://donotuse.trustvc.io", testDnsResolvers);
 
     const sortedAnswer = records?.Answer.sort((a, b) => a.data.localeCompare(b.data));
     expect(sortedAnswer).toMatchObject(sampleResponse.Answer);
@@ -270,7 +270,7 @@ describe("queryDns", () => {
     server = setupServer(...handlers);
     server.listen();
 
-    await expect(queryDns("https://donotuse.openattestation.com", testDnsResolvers)).rejects.toMatchObject({
+    await expect(queryDns("https://donotuse.trustvc.io", testDnsResolvers)).rejects.toMatchObject({
       code: DnsproveStatusCode.IDNS_QUERY_ERROR_GENERAL,
     });
   });
