@@ -37,9 +37,7 @@ describe("googleDnsResolver", () => {
   });
 
   test("throws when Google DNS returns non-2xx", async () => {
-    server = setupServer(
-      http.get("https://dns.google/resolve", () => new HttpResponse(null, { status: 503 }))
-    );
+    server = setupServer(http.get("https://dns.google/resolve", () => new HttpResponse(null, { status: 503 })));
     server.listen();
 
     await expect(googleDnsResolver("my.domain.test")).rejects.toThrow(/HTTP 503/);
@@ -110,9 +108,7 @@ describe("aliDnsResolver", () => {
   });
 
   test("throws when Ali DNS returns non-2xx", async () => {
-    server = setupServer(
-      http.get("https://dns.alidns.com/resolve", () => new HttpResponse(null, { status: 503 }))
-    );
+    server = setupServer(http.get("https://dns.alidns.com/resolve", () => new HttpResponse(null, { status: 503 })));
     server.listen();
 
     await expect(aliDnsResolver("ali.example.test")).rejects.toThrow(/HTTP 503/);
