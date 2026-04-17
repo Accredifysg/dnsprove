@@ -173,6 +173,50 @@ describe("parseDocumentStoreResults", () => {
     ];
     expect(parseDocumentStoreResults(sampleRecord, true)).toStrictEqual([]);
   });
+
+  test("it should accept Mantle mainnet (netId 5000)", () => {
+    const addr = "0x2f60375e8144e16Adf1979936301D8341D58C36C";
+    const sampleRecord = [
+      {
+        name: "example.example.com.",
+        type: 16,
+        TTL: 110,
+        data: `"openatts net=ethereum netId=5000 addr=${addr}"`,
+        dnssec: false,
+      },
+    ];
+    expect(parseDocumentStoreResults(sampleRecord, false)).toStrictEqual([
+      {
+        type: "openatts",
+        net: "ethereum",
+        netId: "5000",
+        addr,
+        dnssec: false,
+      },
+    ]);
+  });
+
+  test("it should accept Mantle testnet (netId 5003)", () => {
+    const addr = "0x2f60375e8144e16Adf1979936301D8341D58C36C";
+    const sampleRecord = [
+      {
+        name: "example.example.com.",
+        type: 16,
+        TTL: 110,
+        data: `"openatts net=ethereum netId=5003 addr=${addr}"`,
+        dnssec: false,
+      },
+    ];
+    expect(parseDocumentStoreResults(sampleRecord, false)).toStrictEqual([
+      {
+        type: "openatts",
+        net: "ethereum",
+        netId: "5003",
+        addr,
+        dnssec: false,
+      },
+    ]);
+  });
 });
 
 describe("queryDns", () => {

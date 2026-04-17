@@ -23,6 +23,8 @@ export enum EthereumNetworks {
   stability = "101010",
   astronTestnet = "21002",
   astron = "1338",
+  mantle = "5000",
+  mantleTestnet = "5003",
 }
 
 export const EthereumNetworkIdT = Union(
@@ -39,7 +41,9 @@ export const EthereumNetworkIdT = Union(
   Literal(EthereumNetworks.stability),
   Literal(EthereumNetworks.local),
   Literal(EthereumNetworks.astronTestnet),
-  Literal(EthereumNetworks.astron)
+  Literal(EthereumNetworks.astron),
+  Literal(EthereumNetworks.mantle),
+  Literal(EthereumNetworks.mantleTestnet)
 );
 
 export const OpenAttestationDNSTextRecordT = Record({
